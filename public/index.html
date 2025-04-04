@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Conversor de Imágenes a WebP</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+		<script src="./js/scripts.js" defer></script>
+		<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+	</head>
+	<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+		<div id="app" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+			<h1 class="text-2xl font-bold text-center mb-4">Conversor de Imágenes a WebP</h1>
+			<form @submit.prevent="uploadImage" class="space-y-4">
+				<div>
+					<label for="image" class="block text-sm font-medium text-gray-700">Sube tu imagen:</label>
+					<input
+						type="file"
+						id="image"
+						ref="imageInput"
+						class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+						accept=".jpg,.jpeg,.png,.gif,.webp"
+						required
+					/>
+				</div>
+				<button
+					type="submit"
+					class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
+					:disabled="isLoading"
+					v-if="!responseMessage"
+				>
+					<span v-if="!isLoading">Convertir a WebP</span>
+					<span v-else class="flex items-center">
+						<svg
+							class="animate-spin h-5 w-5 mr-2 text-white"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+							<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+						</svg>
+						Procesando...
+					</span>
+				</button>
+			</form>
+
+			<div v-if="responseMessage" class="mt-4">
+				<p class="text-sm text-gray-700">{{ responseMessage }}</p>
+				<div v-if="imageUrl" class="mt-4">
+					<img :src="imageUrl" :alt="altText" class="mt-2 max-w-full rounded-md shadow-md" />
+					<div class="mt-2 flex justify-between items-center">
+						<a
+							:href="imageUrl"
+							:download="getFileName(imageUrl)"
+							class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 w-full text-center text-xs mb-4"
+						>
+							Descargar Imagen
+						</a>
+					</div>
+				</div>
+				<div v-if="altText" class="mt-2 grid grid-col-[auto_32px] gap-x-3">
+					<span>Texto ALT:</span>
+					<div class="flex items-center">
+						<p class="text-sm text-gray-700 cursor-pointer" @click="copyToClipboard(altText)">{{ altText }}</p>
+						<button
+							@click="copyToClipboard(altText)"
+							class="text-blue-500 hover:text-blue-700 focus:outline-none max-w-[30px] border border-blue-500 rounded-md px-2 py-1 text-xs"
+							title="Copiar texto ALT"
+						>
+							Copiar
+						</button>
+					</div>
+				</div>
+				<div v-if="showToast" class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-md">
+					Texto ALT copiado al portapapeles
+				</div>
+				<button
+					v-if="responseMessage"
+					@click="deleteImages"
+					class="w-full bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mt-4"
+				>
+					Procesar nueva imagen
+				</button>
+			</div>
+		</div>
+	</body>
+</html>

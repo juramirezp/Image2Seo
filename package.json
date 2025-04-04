@@ -1,0 +1,21 @@
+{
+	"name": "image-processor-landing",
+	"version": "1.0.0",
+	"description": "A simple landing page for uploading and processing images using Node.js.",
+	"main": "src/server.js",
+	"type": "module",
+	"scripts": {
+		"start": "nodemon src/server.js"
+	},
+	"dependencies": {
+		"chalk": "^5.4.1",
+		"dotenv": "^16.4.7",
+		"express": "^4.17.1",
+		"multer": "^1.4.2",
+		"nodemon": "^3.1.9",
+		"openai": "^4.91.1",
+		"sharp": "^0.33.5"
+	},
+	"author": "",
+	"license": "ISC"
+}
